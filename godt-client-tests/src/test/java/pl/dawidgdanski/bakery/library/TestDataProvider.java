@@ -36,4 +36,21 @@ public final class TestDataProvider {
 
         return Collections.unmodifiableCollection(ingredients);
     }
+
+    public static Collection<Element> generateNextElements(final int count) {
+        Collection<Element> elements = new ArrayList<Element>(count);
+
+        for(int i = 0; i < count; i++) {
+            elements.add(new ElementImpl.Builder()
+            .setUnitName("sdf")
+            .setUnitName("name")
+            .setSymbol("Symbol")
+            .setAmount(i * 10)
+            .setHint("Hint")
+            .setName("Name")
+            .build());
+        }
+
+        return Collections.unmodifiableCollection(elements);
+    }
 }
