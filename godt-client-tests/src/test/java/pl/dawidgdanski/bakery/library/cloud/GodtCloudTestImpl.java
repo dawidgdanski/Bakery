@@ -26,7 +26,6 @@ public class GodtCloudTestImpl implements GodtCloud {
             .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
             .registerTypeAdapter(Ingredient.class, new IngredientDeserializer())
             .registerTypeAdapter(Element.class, new ElementDeserializer())
-            .serializeNulls()
             .create();
 
     private final String url;

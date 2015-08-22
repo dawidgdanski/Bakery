@@ -20,7 +20,6 @@ import java.util.List;
 import pl.dawidgdanski.bakery.library.TestDataProvider;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 
-@Ignore
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP, manifest = Config.NONE)
 public class GodtCloudTest {

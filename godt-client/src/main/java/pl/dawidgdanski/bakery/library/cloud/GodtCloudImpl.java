@@ -29,7 +29,6 @@ public class GodtCloudImpl implements GodtCloud {
                 .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
                 .registerTypeAdapter(Ingredient.class, new IngredientDeserializer())
                 .registerTypeAdapter(Element.class, new ElementDeserializer())
-                .serializeNulls()
                 .create();
 
         Converter converter = new GsonConverter(gson);
