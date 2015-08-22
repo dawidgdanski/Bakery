@@ -9,7 +9,6 @@ import java.util.List;
 import pl.dawidgdanski.bakery.library.model.Element;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.Recipe;
-import pl.dawidgdanski.bakery.library.model.Step;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -27,7 +26,6 @@ public class BakeryCloudImpl implements BakeryCloud {
                 .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
                 .registerTypeAdapter(Ingredient.class, new IngredientDeserializer())
                 .registerTypeAdapter(Element.class, new ElementDeserializer())
-                .registerTypeAdapter(Step.class, new StepDeserializer())
                 .serializeNulls()
                 .create();
 

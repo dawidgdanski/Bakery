@@ -8,9 +8,6 @@ import pl.dawidgdanski.bakery.library.model.Element;
 import pl.dawidgdanski.bakery.library.model.ElementImpl;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.IngredientImpl;
-import pl.dawidgdanski.bakery.library.model.MenuCategoryImpl;
-import pl.dawidgdanski.bakery.library.model.Step;
-import pl.dawidgdanski.bakery.library.model.StepImpl;
 
 public final class TestDataProvider {
 
@@ -33,26 +30,10 @@ public final class TestDataProvider {
                             .setHint("hint" + i)
                             .setSymbol("symbol" + i)
                             .setUnitName("nm" + i)
-                            .setMenuCategory(new MenuCategoryImpl("name" + i, "id" + i))
                             .build()))
                     .build());
         }
 
         return Collections.unmodifiableCollection(ingredients);
-    }
-
-    public static Collection<Step> generateNextSteps(final int count) {
-
-        Collection<Step> steps = new ArrayList<Step>(count);
-
-        for (int i = 0; i < count; i++) {
-            steps.add(new StepImpl.Builder()
-                    .setId("_" + i)
-                    .setHeading("Heading" + i)
-                    .setDescription("Description" + i)
-                    .build());
-        }
-
-        return Collections.unmodifiableCollection(steps);
     }
 }

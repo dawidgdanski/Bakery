@@ -14,6 +14,7 @@ import java.util.List;
 public class IngredientImpl implements Ingredient {
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+
         public Ingredient createFromParcel(Parcel source) {
 
             String id = source.readString();
@@ -51,6 +52,7 @@ public class IngredientImpl implements Ingredient {
         this.id = builder.id;
 
         this.name = builder.name;
+
 
         this.elements = Collections.unmodifiableList(new ArrayList<Element>(builder.elements));
 
@@ -99,7 +101,6 @@ public class IngredientImpl implements Ingredient {
                 return false;
             }
         }
-
 
         return TextUtils.equals(this.id, rhs.id) &&
 

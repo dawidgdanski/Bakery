@@ -2,7 +2,6 @@ package pl.dawidgdanski.bakery.library.cloud;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -15,7 +14,6 @@ import java.util.Collection;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 import pl.dawidgdanski.bakery.library.model.RecipeImpl;
-import pl.dawidgdanski.bakery.library.model.Step;
 
 final class RecipeDeserializer extends AbstractDeserializer<Recipe> {
 
@@ -39,23 +37,31 @@ final class RecipeDeserializer extends AbstractDeserializer<Recipe> {
             ingredients.add(ingredient);
         }
 
-        JsonArray stepsArray = getJsonArray(jsonObject.get(JSONConstants.JSON_STEPS));
-
-        Type stepType = new TypeToken<Step>(){ }.getType();
-
-        Collection<Step> steps = new ArrayList<Step>();
-
-        for(JsonElement stepJson : stepsArray) {
-            Step step = context.deserialize(stepJson, stepType);
-            steps.add(step);
-        }
+        JsonElement imageUrlElement = jsonObject.get(JSONConstants.JSON_IMAGES);
+        String imageUrl = getImageUrl(imageUrlElement);
 
         return new RecipeImpl.Builder()
                 .setId(id)
-                .addSteps(steps)
                 .addIngredients(ingredients)
                 .setDescription(description)
+                .setImageUrl(imageUrl)
                 .setTitle(title)
                 .build();
+    }
+
+    private String getImageUrl(final JsonElement jsonElement) {
+        if(jsonElement.isJsonNull()) {
+            return null;
+        }
+
+        if(jsonElement.isJsonArray()) {
+            JsonArray jsonArray = (JsonArray) jsonElement;
+
+            JsonObject firstImageUrlObject = (JsonObject) jsonArray.get(0);
+
+            return getString(firstImageUrlObject.get(JSONConstants.JSON_URL), null);
+        }
+
+        return null;
     }
 }

@@ -24,8 +24,6 @@ public class ElementImpl implements Element {
 
             String symbol = source.readString();
 
-            MenuCategory menuCategory = source.readParcelable(MenuCategory.class.getClassLoader());
-
             return new Builder()
                     .setId(id)
                     .setName(name)
@@ -33,7 +31,6 @@ public class ElementImpl implements Element {
                     .setHint(hint)
                     .setUnitName(unitName)
                     .setSymbol(symbol)
-                    .setMenuCategory(menuCategory)
                     .build();
         }
 
@@ -54,8 +51,6 @@ public class ElementImpl implements Element {
 
     private final String symbol;
 
-    private final MenuCategory menuCategory;
-
     private final int hashCode;
 
     private ElementImpl(Builder builder) {
@@ -72,8 +67,6 @@ public class ElementImpl implements Element {
 
         this.symbol = builder.symbol;
 
-        this.menuCategory = builder.menuCategory;
-
         this.hashCode = new HashCodeBuilder()
                 .append(id)
                 .append(name)
@@ -81,7 +74,6 @@ public class ElementImpl implements Element {
                 .append(hint)
                 .append(unitName)
                 .append(symbol)
-                .append(menuCategory)
                 .toHashCode();
     }
 
@@ -139,14 +131,7 @@ public class ElementImpl implements Element {
 
                 TextUtils.equals(this.symbol, rhs.symbol) &&
 
-                this.amount == rhs.amount &&
-
-                this.menuCategory.equals(rhs.menuCategory);
-    }
-
-    @Override
-    public MenuCategory getMenuCategory() {
-        return menuCategory;
+                this.amount == rhs.amount;
     }
 
     @Override
@@ -166,8 +151,6 @@ public class ElementImpl implements Element {
         private String unitName;
 
         private String symbol;
-
-        private MenuCategory menuCategory;
 
         public Builder setId(String id) {
             this.id = id;
@@ -199,11 +182,6 @@ public class ElementImpl implements Element {
             return this;
         }
 
-        public Builder setMenuCategory(MenuCategory menuCategory) {
-            this.menuCategory = menuCategory;
-            return this;
-        }
-
         public ElementImpl build() {
             return new ElementImpl(this);
         }
@@ -228,7 +206,5 @@ public class ElementImpl implements Element {
         dest.writeString(this.unitName);
 
         dest.writeString(this.symbol);
-
-        dest.writeParcelable(this.menuCategory, 0);
     }
 }
