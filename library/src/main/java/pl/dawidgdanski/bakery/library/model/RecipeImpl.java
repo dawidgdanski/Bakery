@@ -39,6 +39,8 @@ public class RecipeImpl implements Recipe {
         }
     };
 
+    private final String id;
+
     private final String title;
 
     private final String description;
@@ -51,6 +53,8 @@ public class RecipeImpl implements Recipe {
 
     private RecipeImpl(Builder builder) {
 
+        this.id = builder.id;
+
         this.title = builder.title;
 
         this.description = builder.description;
@@ -60,11 +64,17 @@ public class RecipeImpl implements Recipe {
         this.steps = Collections.unmodifiableList(new ArrayList<Step>(builder.steps));
 
         this.hashCode = new HashCodeBuilder()
+                .append(id)
                 .append(title)
                 .append(description)
                 .append(steps.toArray())
                 .append(ingredients.toArray())
                 .toHashCode();
+    }
+
+    @Override
+    public String getId() {
+        return null;
     }
 
     @Override
@@ -112,7 +122,8 @@ public class RecipeImpl implements Recipe {
         }
 
         return TextUtils.equals(this.title, rhs.title) &&
-                TextUtils.equals(this.description, rhs.description);
+                TextUtils.equals(this.description, rhs.description) &&
+                TextUtils.equals(this.id, rhs.id);
     }
 
     @Override
@@ -143,6 +154,8 @@ public class RecipeImpl implements Recipe {
 
     public static class Builder {
 
+        private String id;
+
         private String title;
 
         private String description;
@@ -168,6 +181,11 @@ public class RecipeImpl implements Recipe {
 
         public Builder addSteps(Collection<Step> steps) {
             this.steps.addAll(steps);
+            return this;
+        }
+
+        public Builder setId(String id) {
+            this.id = id;
             return this;
         }
 

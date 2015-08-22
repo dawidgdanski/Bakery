@@ -6,6 +6,8 @@ import java.util.Collection;
 
 public interface Recipe extends Parcelable {
 
+    String getId();
+
     String getTitle();
 
     String getDescription();

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import pl.dawidgdanski.bakery.library.model.Element;
+import pl.dawidgdanski.bakery.library.model.ElementImpl;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.IngredientImpl;
 import pl.dawidgdanski.bakery.library.model.MenuCategoryImpl;
@@ -23,12 +25,16 @@ public final class TestDataProvider {
         for (int i = 0; i < count; i++) {
             ingredients.add(new IngredientImpl.Builder()
                     .setId("_" + i)
-                    .setHint("Hint" + i)
-                    .setAmount(i)
-                    .setName("Name" + i)
-                    .setSymbol("Symbol" + i)
-                    .setUnitName("UN" + i)
-                    .setMenuCategory(new MenuCategoryImpl("name" + i, "_" + i))
+                    .setName("name_" + i)
+                    .addElements(Collections.<Element>singleton(new ElementImpl.Builder()
+                            .setAmount(i)
+                            .setId("id" + i)
+                            .setName("name" + i)
+                            .setHint("hint" + i)
+                            .setSymbol("symbol" + i)
+                            .setUnitName("nm" + i)
+                            .setMenuCategory(new MenuCategoryImpl("name" + i, "id" + i))
+                            .build()))
                     .build());
         }
 
