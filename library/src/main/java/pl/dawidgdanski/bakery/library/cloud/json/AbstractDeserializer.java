@@ -1,4 +1,4 @@
-package pl.dawidgdanski.bakery.library.cloud;
+package pl.dawidgdanski.bakery.library.cloud.json;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;

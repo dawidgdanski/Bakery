@@ -1,4 +1,4 @@
-package pl.dawidgdanski.bakery.library.cloud;
+package pl.dawidgdanski.bakery.library.cloud.json;
 
 final class JSONConstants {
 

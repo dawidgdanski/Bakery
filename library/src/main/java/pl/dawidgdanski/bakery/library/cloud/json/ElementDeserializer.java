@@ -1,4 +1,4 @@
-package pl.dawidgdanski.bakery.library.cloud;
+package pl.dawidgdanski.bakery.library.cloud.json;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import pl.dawidgdanski.bakery.library.model.Element;
 import pl.dawidgdanski.bakery.library.model.ElementImpl;
 
-final class ElementDeserializer extends AbstractDeserializer<Element> {
+public final class ElementDeserializer extends AbstractDeserializer<Element> {
 
     @Override
     public Element deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
