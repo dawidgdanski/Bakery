@@ -38,7 +38,7 @@ public class GodtCloudTest {
 
 
     @Test
-    public void bakeryCloudTest() throws IOException {
+    public void godtCloudTest() throws IOException {
 
         mockWebServer.enqueue(new MockResponse().setBody(TestDataProvider.generate10RecipesPageJson()));
 
@@ -48,6 +48,16 @@ public class GodtCloudTest {
         List<Recipe> recipeList = cloud.getRecipesPage(0, 10);
 
         Assertions.assertThat(mockWebServer.getRequestCount()).isEqualTo(1);
+    }
+
+    @Ignore
+    @Test
+    public void productionGodtCloudTest() {
+        GodtCloud cloud = new GodtCloudImpl();
+
+        List<Recipe> recipeList = cloud.getRecipesPage(0, 10);
+
+        int size = recipeList.size();
     }
 
 }
