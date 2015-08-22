@@ -1,11 +1,11 @@
-evaluationDependsOn(":library")
+evaluationDependsOn(":godt-client")
 
 apply plugin: 'java'
 
 dependencies {
-    def androidModule = project(':library')
+    def androidModule = project(':godt-client')
 
-    testCompile project(path: ':library', configuration: 'debugCompile')
+    testCompile project(path: ':godt-client', configuration: 'debugCompile')
 
     def debugVariant = androidModule.android.libraryVariants.find({it.name == 'debug'})
     testCompile debugVariant.javaCompile.classpath
