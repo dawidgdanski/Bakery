@@ -18,7 +18,4 @@ public interface Element extends Parcelable {
     String getUnitName();
 
     String getSymbol();
-
-    MenuCategory getMenuCategory();
-
 }

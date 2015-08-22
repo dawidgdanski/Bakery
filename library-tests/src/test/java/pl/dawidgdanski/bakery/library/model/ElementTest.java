@@ -20,7 +20,6 @@ public class ElementTest {
                 .setId("_1")
                 .setHint("Mole")
                 .setName("Karla")
-                .setMenuCategory(new MenuCategoryImpl("Percy", "Alleline"))
                 .setSymbol("mi6")
                 .setUnitName("Circus")
                 .build();

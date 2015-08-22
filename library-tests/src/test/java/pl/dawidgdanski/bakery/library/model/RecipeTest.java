@@ -21,8 +21,8 @@ public class RecipeTest {
         final Recipe recipe = new RecipeImpl.Builder()
                 .setDescription("TinkerTailor")
                 .setTitle("SoldierSailor")
+                .setImageUrl("http:url.jpg")
                 .addIngredients(TestDataProvider.generateNextIngredients(100))
-                .addSteps(TestDataProvider.generateNextSteps(100))
                 .build();
 
         assertThat(recipe).canBeParceled();

@@ -2,7 +2,6 @@ package pl.dawidgdanski.bakery.library.cloud;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -16,7 +15,7 @@ import pl.dawidgdanski.bakery.library.model.Element;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.IngredientImpl;
 
-public class IngredientDeserializer extends AbstractDeserializer<Ingredient> {
+final class IngredientDeserializer extends AbstractDeserializer<Ingredient> {
 
     @Override
     public Ingredient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

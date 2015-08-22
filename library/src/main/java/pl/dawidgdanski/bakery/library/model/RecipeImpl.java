@@ -17,20 +17,17 @@ public class RecipeImpl implements Recipe {
 
             String title = source.readString();
             String description = source.readString();
+            String imageUrl = source.readString();
 
             int ingredientsSize = source.readInt();
             List<Ingredient> ingredients = new ArrayList<Ingredient>(ingredientsSize);
             source.readTypedList(ingredients, IngredientImpl.CREATOR);
 
-            int stepsSize = source.readInt();
-            List<Step> steps = new ArrayList<Step>(stepsSize);
-            source.readTypedList(steps, StepImpl.CREATOR);
-
             return new Builder()
                     .setTitle(title)
                     .setDescription(description)
                     .addIngredients(ingredients)
-                    .addSteps(steps)
+                    .setImageUrl(imageUrl)
                     .build();
         }
 
@@ -45,9 +42,9 @@ public class RecipeImpl implements Recipe {
 
     private final String description;
 
-    private final List<Ingredient> ingredients;
+    private final String imageUrl;
 
-    private final List<Step> steps;
+    private final List<Ingredient> ingredients;
 
     private final int hashCode;
 
@@ -59,15 +56,14 @@ public class RecipeImpl implements Recipe {
 
         this.description = builder.description;
 
-        this.ingredients = Collections.unmodifiableList(new ArrayList<Ingredient>(builder.ingredients));
+        this.imageUrl = builder.imageUrl;
 
-        this.steps = Collections.unmodifiableList(new ArrayList<Step>(builder.steps));
+        this.ingredients = Collections.unmodifiableList(new ArrayList<Ingredient>(builder.ingredients));
 
         this.hashCode = new HashCodeBuilder()
                 .append(id)
                 .append(title)
                 .append(description)
-                .append(steps.toArray())
                 .append(ingredients.toArray())
                 .toHashCode();
     }
@@ -93,11 +89,6 @@ public class RecipeImpl implements Recipe {
     }
 
     @Override
-    public Collection<Step> getSteps() {
-        return steps;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if(this == o) {
             return true;
@@ -109,12 +100,6 @@ public class RecipeImpl implements Recipe {
 
         RecipeImpl rhs = (RecipeImpl) o;
 
-        for(Step step : rhs.steps) {
-            if(! this.steps.contains(step)) {
-                return false;
-            }
-        }
-
         for(Ingredient ingredient : rhs.ingredients) {
             if(! this.ingredients.contains(ingredient)) {
                 return false;
@@ -123,7 +108,8 @@ public class RecipeImpl implements Recipe {
 
         return TextUtils.equals(this.title, rhs.title) &&
                 TextUtils.equals(this.description, rhs.description) &&
-                TextUtils.equals(this.id, rhs.id);
+                TextUtils.equals(this.id, rhs.id) &&
+                TextUtils.equals(this.imageUrl, rhs.imageUrl);
     }
 
     @Override
@@ -143,13 +129,11 @@ public class RecipeImpl implements Recipe {
 
         dest.writeString(this.description);
 
+        dest.writeString(this.imageUrl);
+
         dest.writeInt(ingredients.size());
 
         dest.writeTypedList(ingredients);
-
-        dest.writeInt(steps.size());
-
-        dest.writeTypedList(steps);
     }
 
     public static class Builder {
@@ -160,12 +144,17 @@ public class RecipeImpl implements Recipe {
 
         private String description;
 
-        private List<Ingredient> ingredients = new ArrayList<Ingredient>();
+        private String imageUrl;
 
-        private List<Step> steps = new ArrayList<Step>();
+        private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 
         public Builder setTitle(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder setImageUrl(final String imageUrl) {
+            this.imageUrl = imageUrl;
             return this;
         }
 
@@ -176,11 +165,6 @@ public class RecipeImpl implements Recipe {
 
         public Builder addIngredients(Collection<Ingredient> ingredients) {
             this.ingredients.addAll(ingredients);
-            return this;
-        }
-
-        public Builder addSteps(Collection<Step> steps) {
-            this.steps.addAll(steps);
             return this;
         }
 

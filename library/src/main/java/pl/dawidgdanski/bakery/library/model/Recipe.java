@@ -13,6 +13,4 @@ public interface Recipe extends Parcelable {
     String getDescription();
 
     Collection<Ingredient> getIngredients();
-
-    Collection<Step> getSteps();
 }
