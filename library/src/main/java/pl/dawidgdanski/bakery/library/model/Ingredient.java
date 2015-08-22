@@ -3,6 +3,8 @@ package pl.dawidgdanski.bakery.library.model;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
+import java.util.Collection;
+
 public interface Ingredient extends Parcelable {
 
     @Nullable
@@ -10,14 +12,5 @@ public interface Ingredient extends Parcelable {
 
     String getName();
 
-    int getAmount();
-
-    @Nullable
-    String getHint();
-
-    String getUnitName();
-
-    String getSymbol();
-
-    MenuCategory getMenuCategory();
+    Collection<Element> getElements();
 }

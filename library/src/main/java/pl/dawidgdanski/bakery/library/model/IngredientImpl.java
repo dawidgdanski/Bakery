@@ -6,6 +6,11 @@ import android.text.TextUtils;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public class IngredientImpl implements Ingredient {
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
@@ -15,24 +20,16 @@ public class IngredientImpl implements Ingredient {
 
             String name = source.readString();
 
-            int amount = source.readInt();
+            int elementsSize = source.readInt();
 
-            String hint = source.readString();
+            List<Element> elements = new ArrayList<Element>(elementsSize);
 
-            String unitName = source.readString();
-
-            String symbol = source.readString();
-
-            MenuCategory menuCategory = source.readParcelable(MenuCategory.class.getClassLoader());
+            source.readTypedList(elements, ElementImpl.CREATOR);
 
             return new Builder()
                     .setId(id)
                     .setName(name)
-                    .setAmount(amount)
-                    .setHint(hint)
-                    .setUnitName(unitName)
-                    .setSymbol(symbol)
-                    .setMenuCategory(menuCategory)
+                    .addElements(elements)
                     .build();
         }
 
@@ -45,15 +42,7 @@ public class IngredientImpl implements Ingredient {
 
     private final String name;
 
-    private final int amount;
-
-    private final String hint;
-
-    private final String unitName;
-
-    private final String symbol;
-
-    private final MenuCategory menuCategory;
+    private final List<Element> elements;
 
     private final int hashCode;
 
@@ -63,24 +52,12 @@ public class IngredientImpl implements Ingredient {
 
         this.name = builder.name;
 
-        this.amount = builder.amount;
-
-        this.hint = builder.hint;
-
-        this.unitName = builder.unitName;
-
-        this.symbol = builder.symbol;
-
-        this.menuCategory = builder.menuCategory;
+        this.elements = Collections.unmodifiableList(new ArrayList<Element>(builder.elements));
 
         this.hashCode = new HashCodeBuilder()
                 .append(id)
                 .append(name)
-                .append(amount)
-                .append(hint)
-                .append(unitName)
-                .append(symbol)
-                .append(menuCategory)
+                .append(elements.toArray())
                 .toHashCode();
     }
 
@@ -96,25 +73,10 @@ public class IngredientImpl implements Ingredient {
     }
 
     @Override
-    public int getAmount() {
-        return amount;
+    public Collection<Element> getElements() {
+        return elements;
     }
 
-    @Nullable
-    @Override
-    public String getHint() {
-        return hint;
-    }
-
-    @Override
-    public String getUnitName() {
-        return unitName;
-    }
-
-    @Override
-    public String getSymbol() {
-        return symbol;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -128,24 +90,20 @@ public class IngredientImpl implements Ingredient {
 
         IngredientImpl rhs = (IngredientImpl) o;
 
+        if(rhs.elements.size() != this.elements.size()) {
+            return false;
+        }
+
+        for(Element element : rhs.elements) {
+            if(! this.elements.contains(element)) {
+                return false;
+            }
+        }
+
+
         return TextUtils.equals(this.id, rhs.id) &&
 
-                TextUtils.equals(this.name, rhs.name) &&
-
-                TextUtils.equals(this.hint, rhs.hint) &&
-
-                TextUtils.equals(this.unitName, rhs.unitName) &&
-
-                TextUtils.equals(this.symbol, rhs.symbol) &&
-
-                this.amount == rhs.amount &&
-
-                this.menuCategory.equals(rhs.menuCategory);
-    }
-
-    @Override
-    public MenuCategory getMenuCategory() {
-        return menuCategory;
+                TextUtils.equals(this.name, rhs.name);
     }
 
     @Override
@@ -158,15 +116,7 @@ public class IngredientImpl implements Ingredient {
 
         private String name;
 
-        private int amount;
-
-        private String hint;
-
-        private String unitName;
-
-        private String symbol;
-
-        private MenuCategory menuCategory;
+        private List<Element> elements = new ArrayList<Element>();
 
         public Builder setId(String id) {
             this.id = id;
@@ -178,28 +128,8 @@ public class IngredientImpl implements Ingredient {
             return this;
         }
 
-        public Builder setAmount(int amount) {
-            this.amount = amount;
-            return this;
-        }
-
-        public Builder setHint(String hint) {
-            this.hint = hint;
-            return this;
-        }
-
-        public Builder setUnitName(String unitName) {
-            this.unitName = unitName;
-            return this;
-        }
-
-        public Builder setSymbol(String symbol) {
-            this.symbol = symbol;
-            return this;
-        }
-
-        public Builder setMenuCategory(MenuCategory menuCategory) {
-            this.menuCategory = menuCategory;
+        public Builder addElements(Collection<Element> elements) {
+            this.elements.addAll(elements);
             return this;
         }
 
@@ -220,14 +150,8 @@ public class IngredientImpl implements Ingredient {
 
         dest.writeString(this.name);
 
-        dest.writeInt(this.amount);
+        dest.writeInt(this.elements.size());
 
-        dest.writeString(this.hint);
-
-        dest.writeString(this.unitName);
-
-        dest.writeString(this.symbol);
-
-        dest.writeParcelable(this.menuCategory, 0);
+        dest.writeTypedList(this.elements);
     }
 }

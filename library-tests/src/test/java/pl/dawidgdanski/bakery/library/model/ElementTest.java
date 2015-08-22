@@ -7,15 +7,15 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static pl.dawidgdanski.bakery.library.assertions.IngredientAssert.assertThat;
+import static pl.dawidgdanski.bakery.library.assertions.ElementAssert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP, manifest = Config.NONE)
-public class IngredientTest {
+public class ElementTest {
 
     @Test
     public void shouldParcelAndRestoreSelf() {
-        Ingredient SUT = new IngredientImpl.Builder()
+        Element SUT = new ElementImpl.Builder()
                 .setAmount(34)
                 .setId("_1")
                 .setHint("Mole")
