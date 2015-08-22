@@ -18,13 +18,13 @@ import retrofit.client.OkClient;
 import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
 
-public class BakeryCloudImpl implements BakeryCloud {
+public class GodtCloudImpl implements GodtCloud {
 
     private static final String BAKERY_RECIPES_URL = "http://www.godt.no";
 
     private final RecipesService recipesService;
 
-    public BakeryCloudImpl() {
+    public GodtCloudImpl() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
                 .registerTypeAdapter(Ingredient.class, new IngredientDeserializer())

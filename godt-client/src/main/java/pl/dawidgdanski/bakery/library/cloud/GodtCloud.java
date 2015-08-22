@@ -5,7 +5,7 @@ import java.util.List;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 import retrofit.Callback;
 
-public interface BakeryCloud {
+public interface GodtCloud {
 
     List<Recipe> getRecipesPage(int startIndex, int offset);
 
