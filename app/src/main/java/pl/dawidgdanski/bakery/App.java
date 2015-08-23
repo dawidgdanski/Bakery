@@ -2,7 +2,7 @@ package pl.dawidgdanski.bakery;
 
 import android.app.Application;
 
-import pl.dawidgdanski.bakery.provider.DatabaseHelper;
+import pl.dawidgdanski.bakery.database.DatabaseHelper;
 
 public class App extends Application {
 

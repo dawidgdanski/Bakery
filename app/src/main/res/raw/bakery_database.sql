@@ -27,7 +27,7 @@ CREATE TABLE element (
  UNIQUE(element_id, ingredient_id)
 )#
 
-CREATE VIRTUAL TABLE fts_recipe_with_ingredient (
+CREATE VIRTUAL TABLE fts_recipe_with_ingredient USING fts3 (
  recipe_id,
  title,
  description,
@@ -45,6 +45,9 @@ CREATE TRIGGER insert_fts_recipe_with_ingredient_after_recipe_insertion AFTER IN
 CREATE TRIGGER update_fts_recipe_with_ingredient_after_ingredient_insertion AFTER INSERT ON ingredient
  BEGIN
  UPDATE fts_recipe_with_ingredient
- SET ingredient_name = NEW.name
- WHERE recipe_id = NEW.recipe_id;
+ SET ingredient_name =
+  CASE
+  WHEN ingredient_name IS NULL THEN NEW.name
+  ELSE ', ' || NEW.name
+  END;
  END#

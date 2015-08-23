@@ -22,6 +22,7 @@
         </activity>
 
         <provider
+            android:exported="false"
             android:authorities="pl.dawidgdanski.bakery.provider.data"
             android:name=".provider.AppContentProvider"/>
 

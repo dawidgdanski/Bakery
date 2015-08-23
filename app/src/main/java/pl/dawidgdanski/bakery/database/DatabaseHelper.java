@@ -1,4 +1,4 @@
-package pl.dawidgdanski.bakery.provider;
+package pl.dawidgdanski.bakery.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import pl.dawidgdanski.bakery.R;
+import pl.dawidgdanski.bakery.database.contract.Contracts;
 
 public final class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -60,7 +61,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        for (final Uri resourceUri : DatabaseUtils.getResourceUris()) {
+        for (final Uri resourceUri : Contracts.getResourceUris()) {
             String statement = String.format("DROP TABLE IF EXISTS %s", resourceUri.getLastPathSegment());
             database.execSQL(statement);
         }
