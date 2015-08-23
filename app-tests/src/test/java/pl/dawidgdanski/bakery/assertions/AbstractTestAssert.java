@@ -3,13 +3,13 @@ package pl.dawidgdanski.bakery.assertions;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.fest.assertions.api.AbstractAssert;
-import org.fest.assertions.api.Assertions;
+import org.fest.assertions.Assertions;
+import org.fest.assertions.GenericAssert;
 
-public abstract class AbstractTestAssert<S extends AbstractAssert<S, A>, A> extends AbstractAssert<S, A> {
+public abstract class AbstractTestAssert<S extends GenericAssert<S, A>, A> extends GenericAssert<S, A> {
 
-    protected AbstractTestAssert(A actual, Class<?> selfType) {
-        super(actual, selfType);
+    protected AbstractTestAssert(A actual, Class<S> selfType) {
+        super(selfType, actual);
         isNotNull();
     }
 
