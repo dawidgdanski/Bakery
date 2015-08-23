@@ -10,10 +10,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class RecipeImpl implements Recipe {
+public class RecipeImpl extends AbstractModel implements Recipe {
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
         public Recipe createFromParcel(Parcel source) {
+
+            int databaseId = source.readInt();
 
             String title = source.readString();
             String description = source.readString();
@@ -24,6 +26,7 @@ public class RecipeImpl implements Recipe {
             source.readTypedList(ingredients, IngredientImpl.CREATOR);
 
             return new Builder()
+                    .setDatabaseId(databaseId)
                     .setTitle(title)
                     .setDescription(description)
                     .addIngredients(ingredients)
@@ -49,6 +52,7 @@ public class RecipeImpl implements Recipe {
     private final int hashCode;
 
     private RecipeImpl(Builder builder) {
+        super(builder.databaseId);
 
         this.id = builder.id;
 
@@ -70,7 +74,7 @@ public class RecipeImpl implements Recipe {
 
     @Override
     public String getId() {
-        return null;
+        return id;
     }
 
     @Override
@@ -81,6 +85,11 @@ public class RecipeImpl implements Recipe {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
@@ -118,12 +127,9 @@ public class RecipeImpl implements Recipe {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(getDatabaseId());
 
         dest.writeString(this.title);
 
@@ -137,6 +143,8 @@ public class RecipeImpl implements Recipe {
     }
 
     public static class Builder {
+
+        private int databaseId;
 
         private String id;
 
@@ -170,6 +178,11 @@ public class RecipeImpl implements Recipe {
 
         public Builder setId(String id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder setDatabaseId(int databaseId) {
+            this.databaseId = databaseId;
             return this;
         }
 

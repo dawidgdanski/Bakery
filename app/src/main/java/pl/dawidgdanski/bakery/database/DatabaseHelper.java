@@ -28,7 +28,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext;
 
-    public static synchronized DatabaseHelper init(final Context context) {
+    public static synchronized DatabaseHelper initialize(final Context context) {
         if (SINGLETON == null) {
             SINGLETON = new DatabaseHelper(context);
         }
@@ -36,8 +36,12 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
         return SINGLETON;
     }
 
+    public static synchronized boolean isInitialized() {
+        return SINGLETON != null;
+    }
+
     public static synchronized DatabaseHelper getInstance() {
-        Preconditions.checkNotNull(SINGLETON, "DatabaseHelper not initialized!");
+        Preconditions.checkState(isInitialized(), "DatabaseHelper is not initialized.");
         return SINGLETON;
     }
 

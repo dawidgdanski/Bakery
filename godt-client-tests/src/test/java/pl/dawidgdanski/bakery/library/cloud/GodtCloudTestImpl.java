@@ -13,6 +13,7 @@ import java.util.List;
 
 import pl.dawidgdanski.bakery.library.cloud.json.ElementDeserializer;
 import pl.dawidgdanski.bakery.library.cloud.json.IngredientDeserializer;
+import pl.dawidgdanski.bakery.library.cloud.json.RecipeDeserializer;
 import pl.dawidgdanski.bakery.library.model.Element;
 import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.Recipe;

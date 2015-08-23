@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import pl.dawidgdanski.bakery.database.contract.Contracts;
 import pl.dawidgdanski.bakery.database.contract.ElementContract;
+import pl.dawidgdanski.bakery.database.contract.FtsRecipeWithIngredientContract;
 import pl.dawidgdanski.bakery.database.contract.IngredientContract;
 import pl.dawidgdanski.bakery.database.contract.RecipeContract;
 
@@ -23,7 +24,6 @@ final class ContentMetaDataProvider {
                 AppContentProvider.AUTHORITY,
                 ElementContract.Table.TABLE_NAME + "/#",
                 ContentMetaData.ELEMENT_SINGLE_ITEM_URI_INDICATOR);
-
         URI_MATCHER.addURI(
                 AppContentProvider.AUTHORITY,
                 IngredientContract.Table.TABLE_NAME,
@@ -32,7 +32,6 @@ final class ContentMetaDataProvider {
                 AppContentProvider.AUTHORITY,
                 IngredientContract.Table.TABLE_NAME + "/#",
                 ContentMetaData.INGREDIENT_SINGLE_ITEM_URI_INDICATOR);
-
         URI_MATCHER.addURI(
                 AppContentProvider.AUTHORITY,
                 RecipeContract.Table.TABLE_NAME,
@@ -41,6 +40,10 @@ final class ContentMetaDataProvider {
                 AppContentProvider.AUTHORITY,
                 RecipeContract.Table.TABLE_NAME + "/#",
                 ContentMetaData.RECIPE_SINGLE_ITEM_URI_INDICATOR);
+        URI_MATCHER.addURI(
+                AppContentProvider.AUTHORITY,
+                FtsRecipeWithIngredientContract.Table.TABLE_NAME,
+                ContentMetaData.FTS_RECIPE_WITH_INGREDIENT_COLLECTION_URI_INDICATOR);
     }
 
     private ContentMetaDataProvider() {

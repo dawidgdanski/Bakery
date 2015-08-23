@@ -2,15 +2,16 @@ package pl.dawidgdanski.bakery.library.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class ElementImpl implements Element {
+public class ElementImpl extends AbstractModel implements Element {
 
     public static final Parcelable.Creator<Element> CREATOR = new Parcelable.Creator<Element>() {
         public Element createFromParcel(Parcel source) {
+
+            int databaseId = source.readInt();
 
             String id = source.readString();
 
@@ -25,6 +26,7 @@ public class ElementImpl implements Element {
             String symbol = source.readString();
 
             return new Builder()
+                    .setDatabaseId(databaseId)
                     .setId(id)
                     .setName(name)
                     .setAmount(amount)
@@ -54,6 +56,7 @@ public class ElementImpl implements Element {
     private final int hashCode;
 
     private ElementImpl(Builder builder) {
+        super(builder.databaseId);
 
         this.id = builder.id;
 
@@ -77,7 +80,6 @@ public class ElementImpl implements Element {
                 .toHashCode();
     }
 
-    @Nullable
     @Override
     public String getId() {
         return id;
@@ -93,7 +95,6 @@ public class ElementImpl implements Element {
         return amount;
     }
 
-    @Nullable
     @Override
     public String getHint() {
         return hint;
@@ -139,7 +140,11 @@ public class ElementImpl implements Element {
         return hashCode;
     }
 
+
     public static class Builder {
+
+        private int databaseId;
+
         private String id;
 
         private String name;
@@ -182,18 +187,20 @@ public class ElementImpl implements Element {
             return this;
         }
 
+        public Builder setDatabaseId(int databaseId) {
+            this.databaseId = databaseId;
+            return this;
+        }
+
         public ElementImpl build() {
             return new ElementImpl(this);
         }
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(getDatabaseId());
 
         dest.writeString(this.id);
 

@@ -16,6 +16,8 @@ public interface ContentMetaData {
     int ELEMENT_COLLECTION_URI_INDICATOR = 5;
     int ELEMENT_SINGLE_ITEM_URI_INDICATOR = 6;
 
+    int FTS_RECIPE_WITH_INGREDIENT_COLLECTION_URI_INDICATOR = 7;
+
     int getCode();
 
     Uri getUri();

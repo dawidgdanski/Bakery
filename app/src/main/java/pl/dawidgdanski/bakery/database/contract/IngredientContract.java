@@ -14,9 +14,9 @@ public final class IngredientContract {
 
     private IngredientContract() { }
 
-    public static final Uri CONTENT_URI = Uri.parse(Joiner.on("/").join(Contracts.BASE_CONTENT_URI, Table.TABLE_NAME));
+    public static final Uri CONTENT_URI = Uri.parse(Contracts.BASE_CONTENT_URI + "/" + Table.TABLE_NAME);
 
-    public static final Map<String, String> PROJECTION = ImmutableMap.<String, String>builder()
+    public static final Map<String, String> PROJECTION_MAP = ImmutableMap.<String, String>builder()
             .put(Table._ID, Table._ID)
             .put(Table.RECIPE_ID, Table.RECIPE_ID)
             .put(Table.INGREDIENT_ID, Table.INGREDIENT_ID)

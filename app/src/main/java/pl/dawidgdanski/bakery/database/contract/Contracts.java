@@ -3,8 +3,10 @@ package pl.dawidgdanski.bakery.database.contract;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -13,14 +15,8 @@ import pl.dawidgdanski.bakery.provider.ContentMetaData;
 
 public final class Contracts {
 
-    private Contracts() { }
-
-    private static final Collection<Uri> RESOURCE_URIS = ImmutableSet.<Uri>builder()
-            .add(ElementContract.CONTENT_URI)
-            .add(FtsRecipeWithIngredientContract.CONTENT_URI)
-            .add(IngredientContract.CONTENT_URI)
-            .add(RecipeContract.CONTENT_URI)
-            .build();
+    private Contracts() {
+    }
 
     public static final String BASE_COLLECTION_TYPE = String.format("%s/vnd.pl.dawidgdanski.bakery",
             ContentResolver.CURSOR_DIR_BASE_TYPE);
@@ -33,7 +29,13 @@ public final class Contracts {
     public static final String FTS_SELECTION_DOC_ID_AS_ID = "docid AS _id";
 
     public static Collection<Uri> getResourceUris() {
-        return RESOURCE_URIS;
+        return FluentIterable.from(Arrays.asList(ContentMetaDataHolder.values()))
+                .transform(new Function<ContentMetaDataHolder, Uri>() {
+                    @Override
+                    public Uri apply(ContentMetaDataHolder input) {
+                        return input.getUri();
+                    }
+                }).toList();
     }
 
     public static ContentMetaData[] getContentMetaDataHolders() {
@@ -46,7 +48,7 @@ public final class Contracts {
                 ELEMENT_COLLECTION_URI_INDICATOR,
                 ElementContract.CONTENT_URI,
                 ElementContract.Table.TABLE_NAME,
-                ElementContract.PROJECTION,
+                ElementContract.PROJECTION_MAP,
                 ElementContract.DEFAULT_SORT_ORDER,
                 ElementContract.CONTENT_TYPE_COLLECTION,
                 ElementContract.BOUND_NOTIFICATION_URIS,
@@ -56,7 +58,7 @@ public final class Contracts {
                 ELEMENT_SINGLE_ITEM_URI_INDICATOR,
                 ElementContract.CONTENT_URI,
                 ElementContract.Table.TABLE_NAME,
-                ElementContract.PROJECTION,
+                ElementContract.PROJECTION_MAP,
                 ElementContract.DEFAULT_SORT_ORDER,
                 ElementContract.CONTENT_TYPE_SINGLE_ITEM,
                 ElementContract.BOUND_NOTIFICATION_URIS,
@@ -66,7 +68,7 @@ public final class Contracts {
                 INGREDIENT_COLLECTION_URI_INDICATOR,
                 IngredientContract.CONTENT_URI,
                 IngredientContract.Table.TABLE_NAME,
-                IngredientContract.PROJECTION,
+                IngredientContract.PROJECTION_MAP,
                 IngredientContract.DEFAULT_SORT_ORDER,
                 IngredientContract.CONTENT_TYPE_COLLECTION,
                 IngredientContract.BOUND_NOTIFICATION_URIS,
@@ -76,7 +78,7 @@ public final class Contracts {
                 INGREDIENT_SINGLE_ITEM_URI_INDICATOR,
                 IngredientContract.CONTENT_URI,
                 IngredientContract.Table.TABLE_NAME,
-                IngredientContract.PROJECTION,
+                IngredientContract.PROJECTION_MAP,
                 IngredientContract.DEFAULT_SORT_ORDER,
                 IngredientContract.CONTENT_TYPE_SINGLE_ITEM,
                 IngredientContract.BOUND_NOTIFICATION_URIS,
@@ -86,7 +88,7 @@ public final class Contracts {
                 RECIPE_COLLECTION_URI_INDICATOR,
                 RecipeContract.CONTENT_URI,
                 RecipeContract.Table.TABLE_NAME,
-                RecipeContract.PROJECTION,
+                RecipeContract.PROJECTION_MAP,
                 RecipeContract.DEFAULT_SORT_ORDER,
                 RecipeContract.CONTENT_TYPE_COLLECTION,
                 RecipeContract.BOUND_NOTIFICATION_URIS,
@@ -96,11 +98,21 @@ public final class Contracts {
                 RECIPE_SINGLE_ITEM_URI_INDICATOR,
                 RecipeContract.CONTENT_URI,
                 RecipeContract.Table.TABLE_NAME,
-                RecipeContract.PROJECTION,
+                RecipeContract.PROJECTION_MAP,
                 RecipeContract.DEFAULT_SORT_ORDER,
                 RecipeContract.CONTENT_TYPE_SINGLE_ITEM,
                 RecipeContract.BOUND_NOTIFICATION_URIS,
-                true);
+                true),
+
+        RECIPE_WITH_INGREDIENT_COLLECTION(
+                FTS_RECIPE_WITH_INGREDIENT_COLLECTION_URI_INDICATOR,
+                FtsRecipeWithIngredientContract.CONTENT_URI,
+                FtsRecipeWithIngredientContract.Table.TABLE_NAME,
+                FtsRecipeWithIngredientContract.PROJECTION_MAP,
+                FtsRecipeWithIngredientContract.DEFAULT_SORT_ORDER,
+                FtsRecipeWithIngredientContract.CONTENT_TYPE_COLLECTION,
+                FtsRecipeWithIngredientContract.BOUND_NOTIFICATION_URIS,
+                false);
 
         private final Uri uri;
 

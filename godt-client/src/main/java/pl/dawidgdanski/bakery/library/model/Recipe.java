@@ -1,16 +1,16 @@
 package pl.dawidgdanski.bakery.library.model;
 
-import android.os.Parcelable;
-
 import java.util.Collection;
 
-public interface Recipe extends Parcelable {
+public interface Recipe extends Model {
 
     String getId();
 
     String getTitle();
 
     String getDescription();
+
+    String getImageUrl();
 
     Collection<Ingredient> getIngredients();
 }

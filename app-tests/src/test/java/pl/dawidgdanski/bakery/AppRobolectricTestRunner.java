@@ -26,7 +26,7 @@ public class AppRobolectricTestRunner extends RobolectricGradleTestRunner {
         final String resProperty = "/app/src/main/res";
         final String assetsProperty = "/app/src/main/assets";
 
-        return new AndroidManifest(Fs.fileFromPath(projectDirectory + manifestFile),
+        AndroidManifest manifest = new AndroidManifest(Fs.fileFromPath(projectDirectory + manifestFile),
                 Fs.fileFromPath(projectDirectory + resProperty),
                 Fs.fileFromPath(projectDirectory + assetsProperty)) {
             @Override
@@ -39,6 +39,10 @@ public class AppRobolectricTestRunner extends RobolectricGradleTestRunner {
                 return MIN_SDK_VERSION;
             }
         };
+
+        manifest.setPackageName("pl.dawidgdanski.bakery");
+
+        return manifest;
     }
 
 

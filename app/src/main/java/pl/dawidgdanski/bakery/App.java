@@ -9,6 +9,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DatabaseHelper.init(this);
+        DatabaseHelper.initialize(this);
     }
 }

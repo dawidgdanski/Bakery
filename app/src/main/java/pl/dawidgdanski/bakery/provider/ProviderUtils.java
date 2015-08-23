@@ -2,6 +2,8 @@ package pl.dawidgdanski.bakery.provider;
 
 import android.content.ContentResolver;
 import android.database.ContentObserver;
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -38,5 +40,26 @@ final class ProviderUtils {
         Preconditions.checkNotNull(uri, "Uri is null");
 
         return uri.getPathSegments().get(1);
+    }
+
+    static Cursor returnSameOrEmptyCursor(final Cursor cursor) {
+        return cursor == null ? new EmptyCursor() : cursor;
+    }
+
+    private static class EmptyCursor extends MatrixCursor {
+
+        public EmptyCursor() {
+            super(new String[]{}, 1);
+        }
+
+        @Override
+        public int getColumnIndexOrThrow(String columnName) {
+            return -1;
+        }
+
+        @Override
+        public int getColumnIndex(String columnName) {
+            return -1;
+        }
     }
 }

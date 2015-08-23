@@ -18,8 +18,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            consumerProguardFiles 'proguard-rules.pro'
+            consumerProguardFiles 'godt-client-proguard-rules.pro'
         }
     }
 }
@@ -27,9 +26,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.android.support:support-annotations:23.0.0'
     compile 'commons-lang:commons-lang:2.3'
 
 }

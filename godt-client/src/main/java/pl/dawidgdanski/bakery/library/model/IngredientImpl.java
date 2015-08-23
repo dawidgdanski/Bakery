@@ -1,7 +1,6 @@
 package pl.dawidgdanski.bakery.library.model;
 
 import android.os.Parcel;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,11 +10,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class IngredientImpl implements Ingredient {
+public class IngredientImpl extends AbstractModel implements Ingredient {
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
 
         public Ingredient createFromParcel(Parcel source) {
+
+            int databaseId = source.readInt();
 
             String id = source.readString();
 
@@ -28,6 +29,7 @@ public class IngredientImpl implements Ingredient {
             source.readTypedList(elements, ElementImpl.CREATOR);
 
             return new Builder()
+                    .setDatabaseId(databaseId)
                     .setId(id)
                     .setName(name)
                     .addElements(elements)
@@ -48,6 +50,7 @@ public class IngredientImpl implements Ingredient {
     private final int hashCode;
 
     private IngredientImpl(Builder builder) {
+        super(builder.databaseId);
 
         this.id = builder.id;
 
@@ -63,7 +66,6 @@ public class IngredientImpl implements Ingredient {
                 .toHashCode();
     }
 
-    @Nullable
     @Override
     public String getId() {
         return id;
@@ -113,6 +115,9 @@ public class IngredientImpl implements Ingredient {
     }
 
     public static class Builder {
+
+        private int databaseId;
+
         private String id;
 
         private String name;
@@ -134,6 +139,12 @@ public class IngredientImpl implements Ingredient {
             return this;
         }
 
+
+        public Builder setDatabaseId(int databaseId) {
+            this.databaseId = databaseId;
+            return this;
+        }
+
         public IngredientImpl build() {
             return new IngredientImpl(this);
         }
@@ -146,6 +157,8 @@ public class IngredientImpl implements Ingredient {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(getDatabaseId());
 
         dest.writeString(this.id);
 
