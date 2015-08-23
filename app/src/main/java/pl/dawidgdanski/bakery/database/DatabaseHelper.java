@@ -95,7 +95,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
             return databaseString.split(SEPARATOR);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new IllegalStateException(getClass().getSimpleName() + ": cannot create database!");
+            throw new IllegalStateException(getClass().getSimpleName() + ": could not create database!");
         } finally {
             Closeables.closeQuietly(bufferedReader);
         }

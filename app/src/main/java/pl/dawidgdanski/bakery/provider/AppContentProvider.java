@@ -1,9 +1,12 @@
 package pl.dawidgdanski.bakery.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -13,6 +16,8 @@ import android.text.TextUtils;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+
+import java.util.ArrayList;
 
 import pl.dawidgdanski.bakery.database.DatabaseHelper;
 
@@ -116,7 +121,7 @@ public class AppContentProvider extends ContentProvider {
 
         final SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
 
-        if (! contentMetaData.isSingleItemType()) {
+        if (contentMetaData.isSingleItemType()) {
             count = database.update(
                     contentMetaData.getTableName(),
                     values,
@@ -139,5 +144,22 @@ public class AppContentProvider extends ContentProvider {
         ProviderUtils.notifyChange(contentResolver, contentMetaData.getBoundNotificationUris(), null, false);
 
         return count;
+    }
+
+    @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        final SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
+        database.beginTransaction();
+        try {
+            final int operationsCount = operations.size();
+            final ContentProviderResult[] results = new ContentProviderResult[operationsCount];
+            for (int i = 0; i < operationsCount; i++) {
+                results[i] = operations.get(i).apply(this, results, i);
+            }
+            database.setTransactionSuccessful();
+            return results;
+        } finally {
+            database.endTransaction();
+        }
     }
 }

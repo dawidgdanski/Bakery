@@ -3,7 +3,6 @@ package pl.dawidgdanski.bakery.database.contract;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -18,9 +17,9 @@ public final class IngredientContract {
 
     public static final Map<String, String> PROJECTION_MAP = ImmutableMap.<String, String>builder()
             .put(Table._ID, Table._ID)
-            .put(Table.RECIPE_ID, Table.RECIPE_ID)
-            .put(Table.INGREDIENT_ID, Table.INGREDIENT_ID)
-            .put(Table.NAME, Table.NAME)
+            .put(Table.COLUMN_RECIPE_ID, Table.COLUMN_RECIPE_ID)
+            .put(Table.COLUMN_INGREDIENT_ID, Table.COLUMN_INGREDIENT_ID)
+            .put(Table.COLUMN_NAME, Table.COLUMN_NAME)
             .build();
 
     public static Collection<Uri> BOUND_NOTIFICATION_URIS = ImmutableSet.<Uri>builder()
@@ -33,7 +32,7 @@ public final class IngredientContract {
 
     public static final String DEFAULT_SORT_ORDER = String.format(
             "%s ASC",
-            Table.NAME
+            Table.COLUMN_NAME
     );
 
     public static final class Table implements BaseColumns {
@@ -42,10 +41,10 @@ public final class IngredientContract {
 
         public static final String TABLE_NAME = "ingredient";
 
-        public static final String RECIPE_ID = "recipe_id";
+        public static final String COLUMN_RECIPE_ID = "recipe_id";
 
-        public static final String INGREDIENT_ID = "ingredient_id";
+        public static final String COLUMN_INGREDIENT_ID = "ingredient_id";
 
-        public static final String NAME = "name";
+        public static final String COLUMN_NAME = "name";
     }
 }
