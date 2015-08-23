@@ -26,6 +26,10 @@
             android:authorities="pl.dawidgdanski.bakery.provider.data"
             android:name=".provider.AppContentProvider"/>
 
+        <service
+            android:exported="false"
+            android:name=".service.RecipesDownloadService"/>
+
     </application>
 
 </manifest>
