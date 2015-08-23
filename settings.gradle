@@ -1,1 +1,1 @@
-include ':app', ':library', ':app-tests', ':library-tests'
+include ':app', ':godt-client', ':app-tests', ':godt-client-tests'

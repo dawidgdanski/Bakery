@@ -12,6 +12,7 @@ CREATE TABLE ingredient (
  recipe_id TEXT,
  ingredient_id TEXT,
  name TEXT,
+ UNIQUE(recipe_id, ingredient_id)
 )#
 
 CREATE TABLE element (
@@ -22,7 +23,31 @@ CREATE TABLE element (
  amount INTEGER,
  hint TEXT,
  unit_name TEXT,
- symbol TEXT
+ symbol TEXT,
+ UNIQUE(element_id, ingredient_id)
 )#
 
+CREATE VIRTUAL TABLE fts_recipe_with_ingredient USING fts3 (
+ recipe_id,
+ title,
+ description,
+ image_url,
+ ingredient_name
+)#
 
+CREATE TRIGGER insert_fts_recipe_with_ingredient_after_recipe_insertion AFTER INSERT ON recipe
+ BEGIN
+ INSERT INTO
+ fts_recipe_with_ingredient(recipe_id, title, description, image_url, ingredient_name)
+ VALUES(NEW.recipe_id, NEW.title, NEW.description, NEW.image_url, NULL);
+ END#
+
+CREATE TRIGGER update_fts_recipe_with_ingredient_after_ingredient_insertion AFTER INSERT ON ingredient
+ BEGIN
+ UPDATE fts_recipe_with_ingredient
+ SET ingredient_name =
+  CASE
+  WHEN ingredient_name IS NULL THEN NEW.name
+  ELSE ', ' || NEW.name
+  END;
+ END#
