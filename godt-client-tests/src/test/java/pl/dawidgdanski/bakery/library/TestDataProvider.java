@@ -54,6 +54,72 @@ public final class TestDataProvider {
         return Collections.unmodifiableCollection(elements);
     }
 
+    public static String getSingleJsonSchema() {
+        return "[{\n" +
+                "  \"title\": \"recipe_title\",\n" +
+                "  \"description\": \"recipe_description\",\n" +
+                "  \"basicPortionNumber\": 8,\n" +
+                "  \"preparationTime\": 15,\n" +
+                "  \"numberOfComments\": 5,\n" +
+                "  \"numberOfLikes\": 30,\n" +
+                "  \"publishedAt\": \"2015/08/21 10:21:30\",\n" +
+                "  \"status\": \"PUBLISHED\",\n" +
+                "  \"updatedAt\": \"2015/08/21 10:22:09\",\n" +
+                "  \"embedTitle\": null,\n" +
+                "  \"id\": 7010,\n" +
+                "  \"user\": {\n" +
+                "    \"id\": \"16337\",\n" +
+                "    \"displayName\": \"Kristine Ilstad - Det søte liv\",\n" +
+                "    \"image\": \"http://imbo.vgc.no/users/godt/images/bfefc4575533061a9c4c031914830226.jpg?t%5B0%5D=thumbnail%3Awidth%3D110%2Cheight%3D110%2Cfit%3Doutbound&t%5B1%5D=strip&t%5B2%5D=compress%3Alevel%3D75&accessToken=0caa112c6923f068823644cefefa432a2604fa8298cfa83c4f1337cf689e58c4\",\n" +
+                "    \"email\": \"kristine@detsoteliv.no\",\n" +
+                "    \"receiveNotifications\": 1,\n" +
+                "    \"role\": \"partner\"\n" +
+                "  },\n" +
+                "  \"ingredients\": [\n" +
+                "    {\n" +
+                "      \"id\": \"ingredient_id\",\n" +
+                "      \"name\": \"ingredient_name\",\n" +
+                "      \"elements\": [\n" +
+                "        {\n" +
+                "          \"id\": 1213,\n" +
+                "          \"amount\": 4,\n" +
+                "          \"hint\": \"element_hint\",\n" +
+                "          \"name\": \"element_name\",\n" +
+                "          \"unitName\": \"element_unit_name\",\n" +
+                "          \"symbol\": \"element_symbol\",\n" +
+                "          \"menyCategory\": {\n" +
+                "            \"id\": \"9\",\n" +
+                "            \"name\": \"Meieri\"\n" +
+                "          }\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"tags\": [\n" +
+                "    {\n" +
+                "      \"id\": \"135\",\n" +
+                "      \"name\": \"Dessert\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"steps\": [\n" +
+                "    {\n" +
+                "      \"id\": 45335,\n" +
+                "      \"heading\": null,\n" +
+                "      \"description\": \"Visp sammen kefir, sukker og egg.\",\n" +
+                "      \"image\": null,\n" +
+                "      \"video\": null\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"images\": [\n" +
+                "    {\n" +
+                "      \"imboId\": \"84c398a7e4f11348d8c90aa02786b1b9\",\n" +
+                "      \"url\": \"image_url\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"links\": null\n" +
+                "}]";
+    }
+
     public static String generate10RecipesPageJson() {
         return "[{\"title\":\"Klassiske lapper\"," +
                 "\"description\":\"Lapper er alltid popul\\u00e6re og veldig raske \\u00e5 lage. Denne oppskriften inneholder dessuten lite fett som gj\\u00f8r at lappene egner seg godt som hverdagskos.\\u003Cbr \\/\\u003E\\r\\n\\u003Cbr \\/\\u003E\\r\\n Server lappene gjerne med hjemmelaget syltet\\u00f8y ved siden av.\\u003Cbr \\/\\u003E\\r\\n\\u003Cbr \\/\\u003E\\r\\n Og vil du gj\\u00f8r barna ekstra ivrige, kan du drysse hakket sjokolade p\\u00e5 lappene mens de steker, og servere dem som varme sjokoladelapper!\\u003Cbr \\/\\u003E\\r\\n\\u003Cbr \\/\\u003E\\r\\n Oppskriften gir ca. 25 stk.\\u003Cbr \\/\\u003E\\r\\n\\u003Cbr \\/\\u003E\\r\\n Oppskrift og foto: Kristine Ilstad\\/\\u003Ca href=\\u0022http:\\/\\/detsoteliv.no\\u0022\\u003EDet s\\u00f8te liv\\u003C\\/a\\u003E\",\"basicPortionNumber\":8,\"preparationTime\":15,\"numberOfComments\":0,\"numberOfLikes\":77,\"publishedAt\":\"2015\\/08\\/21 10:21:30\"," +

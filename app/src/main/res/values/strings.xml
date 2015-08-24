@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="recipes">Recipes</string>
+    <string name="device_is_offline">Device is offline</string>
+    <string name="all_recipes_loaded">All recipes have been loaded</string>
+    <string name="menu_search">Search</string>
 </resources>

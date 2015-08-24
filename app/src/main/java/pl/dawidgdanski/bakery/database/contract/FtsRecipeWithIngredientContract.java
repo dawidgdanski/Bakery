@@ -22,6 +22,8 @@ public final class FtsRecipeWithIngredientContract {
             .put(Table.COLUMN_TITLE, Table.COLUMN_TITLE)
             .put(Table.COLUMN_DESCRIPTION, Table.COLUMN_DESCRIPTION)
             .put(Table.COLUMN_IMAGE_URL, Table.COLUMN_IMAGE_URL)
+            .put(Table.COLUMN_INGREDIENT_NAME, Table.COLUMN_INGREDIENT_NAME)
+            .put(Table.COLUMN_ELEMENT_NAMES, Table.COLUMN_ELEMENT_NAMES)
             .build();
 
     public static final String DEFAULT_SORT_ORDER = String.format(
@@ -32,6 +34,8 @@ public final class FtsRecipeWithIngredientContract {
     public static final String CONTENT_TYPE_COLLECTION = String.format("%s.recipes_with_ingredients", Contracts.BASE_COLLECTION_TYPE);
 
     public static final Collection<Uri> BOUND_NOTIFICATION_URIS = Collections.EMPTY_LIST;
+
+    public static final String STANDARD_MATCH = Joiner.on(" ").join(Table.TABLE_NAME, "MATCH", "?");
 
     public static final class Table implements BaseColumns {
 
@@ -49,6 +53,9 @@ public final class FtsRecipeWithIngredientContract {
 
         public static final String COLUMN_IMAGE_URL = RecipeContract.Table.COLUMN_IMAGE_URL;
 
+        public static final String COLUMN_INGREDIENT_NAME = "ingredient_name";
+
+        public static final String COLUMN_ELEMENT_NAMES = "element_names";
     }
 
 }

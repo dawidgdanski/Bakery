@@ -23,6 +23,7 @@ public final class ElementContract {
             .put(Table.COLUMN_INGREDIENT_ID, Table.COLUMN_INGREDIENT_ID)
             .put(Table.COLUMN_NAME, Table.COLUMN_NAME)
             .put(Table.COLUMN_HINT, Table.COLUMN_HINT)
+            .put(Table.COLUMN_RECIPE_ID, Table.COLUMN_RECIPE_ID)
             .put(Table.COLUMN_UNIT_NAME, Table.COLUMN_UNIT_NAME)
             .put(Table.COLUMN_SYMBOL, Table.COLUMN_SYMBOL)
             .build();
@@ -50,6 +51,8 @@ public final class ElementContract {
         public static final String COLUMN_ELEMENT_ID = "element_id";
 
         public static final String COLUMN_INGREDIENT_ID = "ingredient_id";
+
+        public static final String COLUMN_RECIPE_ID = "recipe_id";
 
         public static final String COLUMN_NAME = "name";
 

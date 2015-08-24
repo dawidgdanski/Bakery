@@ -39,10 +39,11 @@ public final class ContentMapper {
         return contentValues;
     }
 
-    public static ContentValues toContentValues(final Element element, final String ingredientId) {
+    public static ContentValues toContentValues(final Element element, final String recipeId, final String ingredientId) {
         Preconditions.checkNotNull(element, "element is null");
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(ElementContract.Table.COLUMN_RECIPE_ID, recipeId);
         contentValues.put(ElementContract.Table.COLUMN_SYMBOL, element.getSymbol());
         contentValues.put(ElementContract.Table.COLUMN_AMOUNT, element.getAmount());
         contentValues.put(ElementContract.Table.COLUMN_UNIT_NAME, element.getUnitName());
