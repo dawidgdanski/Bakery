@@ -9,8 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -31,7 +37,8 @@ import pl.dawidgdanski.bakery.service.RecipesDownloadService;
 import pl.dawidgdanski.bakery.ui.adapter.RecipesCursorAdapter;
 
 public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>,
+        SearchView.OnQueryTextListener {
 
     public static RecipeListFragment newInstance() {
 
@@ -42,6 +49,8 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
 
         return fragment;
     }
+
+    private static final String LOADER_EXTRA_QUERY = "query";
 
     private static final int LOADER_ID_RECIPES_WITH_INGREDIENTS = 1;
 
@@ -59,6 +68,8 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     ListView listView;
 
     private SimpleCursorAdapter recipesAdapter;
+
+    private Bundle searchQueryBundle = new Bundle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +94,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setAdapter(recipesAdapter);
-        getLoaderManager().initLoader(LOADER_ID_RECIPES_WITH_INGREDIENTS, null, this);
+        getLoaderManager().initLoader(LOADER_ID_RECIPES_WITH_INGREDIENTS, searchQueryBundle, this);
     }
 
     @Override
@@ -96,6 +107,24 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     public void onDestroy() {
         super.onDestroy();
         BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.recipe_list_fragment, menu);
+
+        final MenuItem searchMenuItem = menu.findItem(R.id.search_recipes);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    searchMenuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                }
+            }
+        });
     }
 
     @Override
@@ -130,7 +159,15 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         CursorLoader loader = new CursorLoader(getActivity());
         loader.setUri(FtsRecipeWithIngredientContract.CONTENT_URI);
         loader.setProjection(RECIPES_WITH_INGREDIENTS_PROJECTION);
-        //loader.setSelection(FtsRecipeWithIngredientContract.STANDARD_MATCH);
+
+        final String searchQuery = args.getString(LOADER_EXTRA_QUERY, "");
+
+        if(!TextUtils.isEmpty(searchQuery)) {
+            loader.setSelection(FtsRecipeWithIngredientContract.STANDARD_MATCH);
+            loader.setSelectionArgs(new String[] {
+                    String.format("%s*", searchQuery)
+            });
+        }
 
         return loader;
     }
@@ -155,5 +192,17 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         if(AppController.getInstance().areAllRecipesLoaded()) {
             throw new SwipeValidationException(R.string.all_recipes_loaded);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        searchQueryBundle.putString(LOADER_EXTRA_QUERY, newText);
+        getLoaderManager().restartLoader(LOADER_ID_RECIPES_WITH_INGREDIENTS, searchQueryBundle, this);
+        return true;
     }
 }

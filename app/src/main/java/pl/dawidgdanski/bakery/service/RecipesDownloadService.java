@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import pl.dawidgdanski.bakery.controller.BusProvider;
 import pl.dawidgdanski.bakery.controller.GodtCloudProvider;
 import pl.dawidgdanski.bakery.controller.PersistenceManager;
 import pl.dawidgdanski.bakery.event.RecipesLoadedEvent;
-import pl.dawidgdanski.bakery.library.cloud.GodtCloud;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 
 public class RecipesDownloadService extends IntentService {
