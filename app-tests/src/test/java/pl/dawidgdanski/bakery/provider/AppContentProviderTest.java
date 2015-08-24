@@ -197,9 +197,10 @@ public class AppContentProviderTest {
                 .setUnitName("UnitName")
                 .build();
 
+        String recipeId = "recipe";
         String ingredientId = "asdf";
 
-        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, ingredientId));
+        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, recipeId, ingredientId));
 
         Cursor cursor = contentResolver.query(itemUri, null, null, null, null);
 
@@ -219,9 +220,10 @@ public class AppContentProviderTest {
                 .setUnitName("UnitName")
                 .build();
 
+        String recipeId = "recipe";
         String ingredientId = "asdf";
 
-        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, ingredientId));
+        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, recipeId, ingredientId));
 
         final int newAmount = 4;
 
@@ -248,9 +250,10 @@ public class AppContentProviderTest {
                 .setUnitName("UnitName")
                 .build();
 
+        String recipeId = "recipe";
         String ingredientId = "asdf";
 
-        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, ingredientId));
+        Uri itemUri = contentResolver.insert(ElementContract.CONTENT_URI, ContentMapper.toContentValues(element, recipeId, ingredientId));
 
         int deletionCount = contentResolver.delete(itemUri, null, null);
 

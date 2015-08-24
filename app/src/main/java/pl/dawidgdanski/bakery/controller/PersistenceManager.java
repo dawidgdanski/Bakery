@@ -57,7 +57,7 @@ public final class PersistenceManager {
                 for(Element element : elements) {
                     operations.add(ContentProviderOperation.newInsert(
                             ElementContract.CONTENT_URI)
-                            .withValues(ContentMapper.toContentValues(element, ingredientId))
+                            .withValues(ContentMapper.toContentValues(element, recipeId, ingredientId))
                             .build());
                 }
             }

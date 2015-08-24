@@ -23,6 +23,7 @@ public final class FtsRecipeWithIngredientContract {
             .put(Table.COLUMN_DESCRIPTION, Table.COLUMN_DESCRIPTION)
             .put(Table.COLUMN_IMAGE_URL, Table.COLUMN_IMAGE_URL)
             .put(Table.COLUMN_INGREDIENT_NAME, Table.COLUMN_INGREDIENT_NAME)
+            .put(Table.COLUMN_ELEMENT_NAMES, Table.COLUMN_ELEMENT_NAMES)
             .build();
 
     public static final String DEFAULT_SORT_ORDER = String.format(
@@ -53,6 +54,8 @@ public final class FtsRecipeWithIngredientContract {
         public static final String COLUMN_IMAGE_URL = RecipeContract.Table.COLUMN_IMAGE_URL;
 
         public static final String COLUMN_INGREDIENT_NAME = "ingredient_name";
+
+        public static final String COLUMN_ELEMENT_NAMES = "element_names";
     }
 
 }
