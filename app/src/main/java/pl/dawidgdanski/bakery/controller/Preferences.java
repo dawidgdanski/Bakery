@@ -3,116 +3,62 @@ package pl.dawidgdanski.bakery.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 final class Preferences {
 
     private final SharedPreferences sharedPreferences;
 
-    private final Lock readLock;
-
-    private final Lock writeLock;
-
-
     public Preferences(final String preferenceTarget, final Context applicationContext) {
         sharedPreferences = applicationContext.getSharedPreferences(preferenceTarget, Context.MODE_PRIVATE);
-
-        ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-        readLock = lock.readLock();
-        writeLock = lock.writeLock();
     }
 
     public void remove(final String key) {
-        writeLock.lock();
-        try {
-            sharedPreferences.edit()
-                    .remove(key)
-                    .apply();
-        } finally {
-            writeLock.unlock();
-        }
+        sharedPreferences.edit()
+                .remove(key)
+                .apply();
     }
 
     public void putString(final String key, final String value) {
-        writeLock.lock();
-        try {
-            sharedPreferences.edit()
-                    .putString(key, value)
-                    .apply();
-        } finally {
-            writeLock.unlock();
-        }
+        sharedPreferences.edit()
+                .putString(key, value)
+                .apply();
     }
 
     public String getString(final String key) {
-        readLock.lock();
-        try {
-            return sharedPreferences.getString(key, "");
-        } finally {
-            readLock.unlock();
-        }
+        return sharedPreferences.getString(key, "");
     }
 
     public void putInt(final String key, final int value) {
-        writeLock.lock();
-        try {
-            sharedPreferences.edit()
-                    .putInt(key, value)
-                    .apply();
-        } finally {
-            writeLock.unlock();
-        }
+        sharedPreferences.edit()
+                .putInt(key, value)
+                .apply();
+    }
+
+    public int getInt(final String key, final int defaultValue) {
+        return sharedPreferences.getInt(key, defaultValue);
     }
 
     public int getInt(final String key) {
-        readLock.lock();
-
-        try {
-            return sharedPreferences.getInt(key, Integer.MIN_VALUE);
-        } finally {
-            readLock.unlock();
-        }
+        return getInt(key, Integer.MIN_VALUE);
     }
 
     public void putBoolean(final String key, final boolean value) {
-        writeLock.lock();
-        try {
-            sharedPreferences.edit()
-                    .putBoolean(key, value)
-                    .apply();
-        } finally {
-            writeLock.unlock();
-        }
+        sharedPreferences.edit()
+                .putBoolean(key, value)
+                .apply();
     }
 
     public void putLong(final String key, final long value) {
-        writeLock.lock();
-        try {
-            sharedPreferences.edit()
-                    .putLong(key, value)
-                    .apply();
-        } finally {
-            writeLock.unlock();
-        }
+        sharedPreferences.edit()
+                .putLong(key, value)
+                .apply();
     }
 
     public long getLong(final String key, final long defaultValue) {
-        readLock.lock();
-        try {
-            return sharedPreferences.getLong(key, defaultValue);
-        } finally {
-            readLock.unlock();
-        }
+        return sharedPreferences.getLong(key, defaultValue);
     }
 
     public boolean getBoolean(final String key) {
-        readLock.lock();
-        try {
-            return sharedPreferences.getBoolean(key, false);
-        } finally {
-            readLock.unlock();
-        }
+        return sharedPreferences.getBoolean(key, false);
     }
 
     public SharedPreferences.Editor edit() {
@@ -120,7 +66,6 @@ final class Preferences {
     }
 
     public void clear() {
-
         sharedPreferences.edit()
                 .clear()
                 .apply();

@@ -3,16 +3,14 @@ CREATE TABLE recipe (
  recipe_id TEXT,
  title TEXT,
  description TEXT,
- image_url TEXT,
- UNIQUE(recipe_id)
+ image_url TEXT
 )#
 
 CREATE TABLE ingredient (
  _id INTEGER PRIMARY KEY AUTOINCREMENT,
  recipe_id TEXT,
  ingredient_id TEXT,
- name TEXT,
- UNIQUE(recipe_id, ingredient_id)
+ name TEXT
 )#
 
 CREATE TABLE element (
@@ -23,8 +21,7 @@ CREATE TABLE element (
  amount INTEGER,
  hint TEXT,
  unit_name TEXT,
- symbol TEXT,
- UNIQUE(element_id, ingredient_id)
+ symbol TEXT
 )#
 
 CREATE VIRTUAL TABLE fts_recipe_with_ingredient USING fts3 (

@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
     private void intializeFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, RecipeListFragment.newInstance())
+                .replace(R.id.fragment_container, RecipeListFragment.newInstance())
                 .commit();
     }
 }
