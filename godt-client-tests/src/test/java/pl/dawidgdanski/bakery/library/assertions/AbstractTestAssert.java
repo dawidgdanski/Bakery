@@ -1,4 +1,4 @@
-package pl.dawidgdanski.bakery.assertions;
+package pl.dawidgdanski.bakery.library.assertions;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -16,8 +16,10 @@ public abstract class AbstractTestAssert<S extends GenericAssert<S, A>, A> exten
     protected abstract Parcelable.Creator getCreator();
 
     public final S canBeParceled() {
-        Assertions.assertThat(actual).overridingErrorMessage(String.format("Class %s does not implement Parcelable interface", actual.getClass().getSimpleName()))
+        Assertions.assertThat(actual)
+                .overridingErrorMessage(String.format("Class %s does not implement Parcelable interface", actual.getClass().getSimpleName()))
                 .isInstanceOf(Parcelable.class);
+
         final Parcelable parcelable = (Parcelable) actual;
         final Parcel parcel = Parcel.obtain();
         parcelable.writeToParcel(parcel, 0);
