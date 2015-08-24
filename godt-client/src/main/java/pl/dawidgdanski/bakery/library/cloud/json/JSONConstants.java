@@ -7,6 +7,8 @@ final class JSONConstants {
 
     static final String JSON_TITLE = "title";
 
+    public static final String JSON_UNIT_NAME = "unitName";
+
     public static final String JSON_AMOUNT = "amount";
     static final String JSON_DESCRIPTION = "description";
 
