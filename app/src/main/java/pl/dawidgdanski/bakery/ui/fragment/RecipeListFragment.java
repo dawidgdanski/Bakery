@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -25,6 +26,7 @@ import pl.dawidgdanski.bakery.controller.BusProvider;
 import pl.dawidgdanski.bakery.database.contract.Contracts;
 import pl.dawidgdanski.bakery.database.contract.FtsRecipeWithIngredientContract;
 import pl.dawidgdanski.bakery.event.RecipesLoadedEvent;
+import pl.dawidgdanski.bakery.exception.SwipeValidationException;
 import pl.dawidgdanski.bakery.service.RecipesDownloadService;
 import pl.dawidgdanski.bakery.ui.adapter.RecipesCursorAdapter;
 
@@ -98,17 +100,23 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
-        final Context context = getActivity();
-        AppController appController = AppController.getInstance();
 
-        final boolean areAllRecipesLoaded = appController.areAllRecipesLoaded();
-        final boolean isDeviceOnline = appController.isDeviceOnline(context);
+        try {
+            validateInternetConnection();
 
-        if (context != null && !areAllRecipesLoaded && isDeviceOnline) {
-            context.startService(new Intent(context, RecipesDownloadService.class));
+            validateRecipesCount();
+
             swipeRefreshLayout.setRefreshing(true);
-        } else {
+
+            final Context context = getActivity();
+            context.startService(new Intent(context, RecipesDownloadService.class));
+
+        } catch (SwipeValidationException e) {
             swipeRefreshLayout.setRefreshing(false);
+            View view = getView();
+            if(view != null) {
+                Snackbar.make(view, getString(e.getErrorStringId()), Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -135,5 +143,17 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         recipesAdapter.swapCursor(null);
+    }
+
+    private void validateInternetConnection() throws SwipeValidationException {
+        if(! AppController.getInstance().isDeviceOnline(getActivity())) {
+            throw new SwipeValidationException(R.string.device_is_offline);
+        }
+    }
+
+    private void validateRecipesCount() throws SwipeValidationException {
+        if(AppController.getInstance().areAllRecipesLoaded()) {
+            throw new SwipeValidationException(R.string.all_recipes_loaded);
+        }
     }
 }

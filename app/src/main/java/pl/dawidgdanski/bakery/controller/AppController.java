@@ -43,6 +43,11 @@ public class AppController  {
     }
 
     public boolean isDeviceOnline(final Context context) {
+
+        if(context == null) {
+            return true;
+        }
+
         final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
