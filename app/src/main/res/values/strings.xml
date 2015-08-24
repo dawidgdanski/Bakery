@@ -7,4 +7,5 @@
     <string name="device_is_offline">Device is offline</string>
     <string name="all_recipes_loaded">All recipes have been loaded</string>
     <string name="menu_search">Search</string>
+    <string name="swipe_down_to_load_recipes">Swipe down to load recipes</string>
 </resources>

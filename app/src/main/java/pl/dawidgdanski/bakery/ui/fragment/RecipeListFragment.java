@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
@@ -61,6 +62,9 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
             FtsRecipeWithIngredientContract.Table.COLUMN_INGREDIENT_NAME
     };
 
+    @Bind(R.id.empty_list_text)
+    TextView emptyListText;
+
     @Bind(R.id.swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -93,6 +97,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        listView.setEmptyView(emptyListText);
         listView.setAdapter(recipesAdapter);
         getLoaderManager().initLoader(LOADER_ID_RECIPES_WITH_INGREDIENTS, searchQueryBundle, this);
     }
