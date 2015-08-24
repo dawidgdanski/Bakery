@@ -22,13 +22,16 @@ public final class ElementDeserializer extends AbstractDeserializer<Element> {
         JsonElement amountElement = jsonObject.get(JSONConstants.JSON_AMOUNT);
         int amount = getInt(amountElement, 0);
 
-        String hint = getString(jsonObject.get(JSONConstants.JSON_NAME), null);
+        String name = getString(jsonObject.get(JSONConstants.JSON_NAME), null);
         String unitName = getString(jsonObject.get(JSONConstants.JSON_SYMBOL), null);
+
+        String hint = getString(jsonObject.get(JSONConstants.JSON_HINT), null);
 
         return new ElementImpl.Builder()
                 .setUnitName(unitName)
-                .setHint(hint)
+                .setName(name)
                 .setAmount(amount)
+                .setHint(hint)
                 .setId(id)
                 .build();
     }
