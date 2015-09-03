@@ -14,6 +14,7 @@ import pl.dawidgdanski.bakery.library.model.Ingredient;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.client.Client;
 import retrofit.client.OkClient;
 import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
@@ -22,35 +23,47 @@ public class GodtCloudImpl implements GodtCloud {
 
     private static final String BAKERY_RECIPES_URL = "http://www.godt.no";
 
-    private final RecipesService recipesService;
+    private RecipesService recipesService;
 
-    public GodtCloudImpl() {
+    protected String getEndpoint() {
+        return BAKERY_RECIPES_URL;
+    }
+
+    protected Client getClient() {
+        return new OkClient(new OkHttpClient());
+    }
+
+    protected Converter getConverter() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Recipe.class, new RecipeDeserializer())
                 .registerTypeAdapter(Ingredient.class, new IngredientDeserializer())
                 .registerTypeAdapter(Element.class, new ElementDeserializer())
                 .create();
 
-        Converter converter = new GsonConverter(gson);
+        return new GsonConverter(gson);
+    }
 
-        OkClient client = new OkClient(new OkHttpClient());
+    private synchronized RecipesService getRecipesService() {
+        if(recipesService == null) {
+            final RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(getEndpoint())
+                    .setClient(getClient())
+                    .setConverter(getConverter())
+                    .build();
 
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(BAKERY_RECIPES_URL)
-                .setClient(client)
-                .setConverter(converter)
-                .build();
+            recipesService = restAdapter.create(RecipesService.class);
+        }
 
-        recipesService = restAdapter.create(RecipesService.class);
+        return recipesService;
     }
 
     @Override
     public List<Recipe> getRecipesPage(int startIndex, int offset) {
-        return recipesService.getRecipes(startIndex, offset);
+        return getRecipesService().getRecipes(startIndex, offset);
     }
 
     @Override
     public void getRecipesPage(int startIndex, int offset, Callback<List<Recipe>> callback) {
-        recipesService.getRecipes(startIndex, offset, callback);
+        getRecipesService().getRecipes(startIndex, offset, callback);
     }
 }

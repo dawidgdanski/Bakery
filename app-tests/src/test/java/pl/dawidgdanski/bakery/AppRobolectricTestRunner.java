@@ -20,15 +20,14 @@ public class AppRobolectricTestRunner extends RobolectricGradleTestRunner {
     @Override
     protected AndroidManifest getAppManifest(Config config) {
 
-        final String projectDirectory = System.getProperty("user.dir");
+        final String manifestPath = PathResolver.resolveAndroidManifestPath();
+        final String resourcesPath = PathResolver.resolveResPath();
+        final String assetsPath = PathResolver.resolveAssetsPath();
 
-        final String manifestFile = "/app-tests/src/test/resources/AndroidManifest.xml";
-        final String resProperty = "/app/src/main/res";
-        final String assetsProperty = "/app/src/main/assets";
-
-        AndroidManifest manifest = new AndroidManifest(Fs.fileFromPath(projectDirectory + manifestFile),
-                Fs.fileFromPath(projectDirectory + resProperty),
-                Fs.fileFromPath(projectDirectory + assetsProperty)) {
+        AndroidManifest manifest = new AndroidManifest(
+                Fs.fileFromPath(manifestPath),
+                Fs.fileFromPath(resourcesPath),
+                Fs.fileFromPath(assetsPath)) {
             @Override
             public int getTargetSdkVersion() {
                 return TARGET_SDK_VERSION;

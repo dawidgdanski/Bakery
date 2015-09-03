@@ -9,16 +9,22 @@ import retrofit.http.Query;
 
 interface RecipesService {
 
-    @GET("/api/getRecipesListDetailed?tags=&size=thumbnail-medium&ratio=1")
+    String RECIPES_URL = "/api/getRecipesListDetailed?tags=&size=thumbnail-medium&ratio=1";
+
+    String URL_PARAMETER_FROM = "from";
+
+    String URL_PARAMETER_LIMIT = "limit";
+
+    @GET(RECIPES_URL)
     List<Recipe> getRecipes(
-            @Query("from") int startIndex,
-            @Query("limit") int offset
+            @Query(URL_PARAMETER_FROM) int startIndex,
+            @Query(URL_PARAMETER_LIMIT) int offset
     );
 
-    @GET("/api/getRecipesListDetailed?tags=&size=thumbnail-medium&ratio=1")
+    @GET(RECIPES_URL)
     void getRecipes(
-            @Query("from") int startIndex,
-            @Query("limit") int offset,
+            @Query(URL_PARAMETER_FROM) int startIndex,
+            @Query(URL_PARAMETER_LIMIT) int offset,
             Callback<List<Recipe>> recipes
     );
 

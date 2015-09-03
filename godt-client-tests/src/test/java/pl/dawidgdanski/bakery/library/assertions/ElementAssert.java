@@ -3,6 +3,7 @@ package pl.dawidgdanski.bakery.library.assertions;
 import android.os.Parcelable;
 
 import pl.dawidgdanski.bakery.library.model.Element;
+import pl.dawidgdanski.bakery.library.model.ElementImpl;
 import pl.dawidgdanski.bakery.library.model.IngredientImpl;
 
 public class ElementAssert extends AbstractTestAssert<ElementAssert, Element> {
@@ -17,6 +18,6 @@ public class ElementAssert extends AbstractTestAssert<ElementAssert, Element> {
 
     @Override
     protected Parcelable.Creator getCreator() {
-        return IngredientImpl.CREATOR;
+        return ElementImpl.CREATOR;
     }
 }
