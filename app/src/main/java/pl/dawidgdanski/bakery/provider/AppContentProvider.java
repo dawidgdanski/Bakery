@@ -19,14 +19,28 @@ import com.google.common.base.Preconditions;
 
 import java.util.ArrayList;
 
-import pl.dawidgdanski.bakery.database.DatabaseHelper;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import pl.dawidgdanski.bakery.App;
+import pl.dawidgdanski.bakery.inject.DependencyInjector;
+import pl.dawidgdanski.bakery.inject.Qualifiers;
 
 public class AppContentProvider extends ContentProvider {
 
     public static final String AUTHORITY = "pl.dawidgdanski.bakery.provider.data";
 
+    @Inject
+    @Named(Qualifiers.READABLE_DATABASE)
+    SQLiteDatabase readableDatabase;
+
+    @Inject
+    @Named(Qualifiers.WRITABLE_DATABASE)
+    SQLiteDatabase writableDatabase;
+
     @Override
     public boolean onCreate() {
+        DependencyInjector.getGraph().inject(this);
         return true;
     }
 
@@ -51,9 +65,13 @@ public class AppContentProvider extends ContentProvider {
             orderBy = contentMetaData.getDefaultSortOrder();
         }
 
-        final SQLiteDatabase database = DatabaseHelper.getInstance().getReadableDatabase();
-
-        final Cursor cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, orderBy);
+        final Cursor cursor = queryBuilder.query(readableDatabase,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                orderBy);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -69,7 +87,7 @@ public class AppContentProvider extends ContentProvider {
 
         final ContentMetaData metaData = ContentMetaDataProvider.matchContentMetaData(uri);
 
-        final long rowId = DatabaseHelper.getInstance().getWritableDatabase().insertOrThrow(
+        final long rowId = writableDatabase.insertOrThrow(
                 metaData.getTableName(),
                 null,
                 values);
@@ -87,11 +105,9 @@ public class AppContentProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final ContentMetaData contentMetaData = ContentMetaDataProvider.matchContentMetaData(uri);
 
-        final SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
-
         int count;
         if (contentMetaData.isSingleItemType()) {
-            count = database.delete(
+            count = writableDatabase.delete(
                     contentMetaData.getTableName(),
                     Joiner.on(" ").join(
                             ProviderUtils.whereEqualTo(BaseColumns._ID, ProviderUtils.getRowId(uri)),
@@ -99,7 +115,7 @@ public class AppContentProvider extends ContentProvider {
                     ),
                     selectionArgs);
         } else {
-            count = database.delete(
+            count = writableDatabase.delete(
                     contentMetaData.getTableName(),
                     selection,
                     selectionArgs);
@@ -119,10 +135,8 @@ public class AppContentProvider extends ContentProvider {
 
         final ContentMetaData contentMetaData = ContentMetaDataProvider.matchContentMetaData(uri);
 
-        final SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
-
         if (contentMetaData.isSingleItemType()) {
-            count = database.update(
+            count = writableDatabase.update(
                     contentMetaData.getTableName(),
                     values,
                     Joiner.on(" ").join(
@@ -131,7 +145,7 @@ public class AppContentProvider extends ContentProvider {
                     ),
                     selectionArgs);
         } else {
-            count = database.update(
+            count = writableDatabase.update(
                     contentMetaData.getTableName(),
                     values,
                     selection,
@@ -148,18 +162,18 @@ public class AppContentProvider extends ContentProvider {
 
     @Override
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
-        final SQLiteDatabase database = DatabaseHelper.getInstance().getWritableDatabase();
-        database.beginTransaction();
+
+        writableDatabase.beginTransaction();
         try {
             final int operationsCount = operations.size();
             final ContentProviderResult[] results = new ContentProviderResult[operationsCount];
             for (int i = 0; i < operationsCount; i++) {
                 results[i] = operations.get(i).apply(this, results, i);
             }
-            database.setTransactionSuccessful();
+            writableDatabase.setTransactionSuccessful();
             return results;
         } finally {
-            database.endTransaction();
+            writableDatabase.endTransaction();
         }
     }
 }

@@ -23,19 +23,23 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.dawidgdanski.bakery.R;
 import pl.dawidgdanski.bakery.controller.AppController;
-import pl.dawidgdanski.bakery.controller.BusProvider;
 import pl.dawidgdanski.bakery.database.contract.Contracts;
 import pl.dawidgdanski.bakery.database.contract.FtsRecipeWithIngredientContract;
 import pl.dawidgdanski.bakery.event.RecipesLoadedEvent;
 import pl.dawidgdanski.bakery.exception.SwipeValidationException;
+import pl.dawidgdanski.bakery.inject.DependencyInjector;
 import pl.dawidgdanski.bakery.service.RecipesDownloadService;
 import pl.dawidgdanski.bakery.ui.adapter.RecipesCursorAdapter;
+import pl.dawidgdanski.bakery.util.AppUtils;
 
 public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         LoaderManager.LoaderCallbacks<Cursor>,
@@ -71,6 +75,12 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Bind(android.R.id.list)
     ListView listView;
 
+    @Inject
+    Bus bus;
+
+    @Inject
+    AppController appController;
+
     private SimpleCursorAdapter recipesAdapter;
 
     private Bundle searchQueryBundle = new Bundle();
@@ -78,8 +88,9 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DependencyInjector.getGraph().inject(this);
         setHasOptionsMenu(true);
-        BusProvider.getInstance().register(this);
+        bus.register(this);
     }
 
     @Override
@@ -111,7 +122,7 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
     @Override
     public void onDestroy() {
         super.onDestroy();
-        BusProvider.getInstance().unregister(this);
+        bus.unregister(this);
     }
 
     @Override
@@ -156,7 +167,16 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Subscribe
     public void onRecipesLoadedEvent(RecipesLoadedEvent event) {
-        swipeRefreshLayout.setRefreshing(false);
+        if(AppUtils.isThisThreadAMainOne()) {
+            swipeRefreshLayout.setRefreshing(false);
+        } else {
+            AppUtils.runOnUiThread(getActivity(), new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 
     @Override
@@ -187,18 +207,6 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         recipesAdapter.swapCursor(null);
     }
 
-    private void validateInternetConnection() throws SwipeValidationException {
-        if(! AppController.getInstance().isDeviceOnline(getActivity())) {
-            throw new SwipeValidationException(R.string.device_is_offline);
-        }
-    }
-
-    private void validateRecipesCount() throws SwipeValidationException {
-        if(AppController.getInstance().areAllRecipesLoaded()) {
-            throw new SwipeValidationException(R.string.all_recipes_loaded);
-        }
-    }
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -209,5 +217,17 @@ public class RecipeListFragment extends Fragment implements SwipeRefreshLayout.O
         searchQueryBundle.putString(LOADER_EXTRA_QUERY, newText);
         getLoaderManager().restartLoader(LOADER_ID_RECIPES_WITH_INGREDIENTS, searchQueryBundle, this);
         return true;
+    }
+
+    private void validateInternetConnection() throws SwipeValidationException {
+        if(! appController.isDeviceOnline()) {
+            throw new SwipeValidationException(R.string.device_is_offline);
+        }
+    }
+
+    private void validateRecipesCount() throws SwipeValidationException {
+        if(appController.areAllRecipesLoaded()) {
+            throw new SwipeValidationException(R.string.all_recipes_loaded);
+        }
     }
 }

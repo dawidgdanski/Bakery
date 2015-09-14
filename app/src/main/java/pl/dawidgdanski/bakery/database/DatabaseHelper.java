@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-
-import com.google.common.base.Preconditions;
 import com.google.common.io.Closeables;
 
 import java.io.BufferedReader;
@@ -18,40 +16,17 @@ import pl.dawidgdanski.bakery.database.contract.Contracts;
 
 public final class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static DatabaseHelper SINGLETON;
-
     public static final String DATABASE_NAME = "bakery_db.db";
 
     private static final String SEPARATOR = "#";
 
     private static final int DATABASE_VERSION = 1;
 
-    private Context mContext;
+    private final Context context;
 
-    public static synchronized DatabaseHelper initialize(final Context context) {
-        if (SINGLETON == null) {
-            SINGLETON = new DatabaseHelper(context);
-        }
-
-        return SINGLETON;
-    }
-
-    public static synchronized boolean isInitialized() {
-        return SINGLETON != null;
-    }
-
-    public static synchronized DatabaseHelper getInstance() {
-        Preconditions.checkState(isInitialized(), "DatabaseHelper is not initialized.");
-        return SINGLETON;
-    }
-
-    public static void release() {
-        SINGLETON = null;
-    }
-
-    private DatabaseHelper(final Context context) {
+    public DatabaseHelper(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
@@ -78,7 +53,7 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private InputStream openDatabaseMetaResource() {
-        return mContext.getResources().openRawResource(R.raw.bakery_database);
+        return context.getResources().openRawResource(R.raw.bakery_database);
     }
 
     private String[] getQueriesArray() {

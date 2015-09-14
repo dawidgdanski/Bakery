@@ -23,14 +23,16 @@ public class GodtCloudImpl implements GodtCloud {
 
     private static final String BAKERY_RECIPES_URL = "http://www.godt.no";
 
+    private final Client client;
+
     private RecipesService recipesService;
+
+    public GodtCloudImpl(Client client) {
+        this.client = client;
+    }
 
     protected String getEndpoint() {
         return BAKERY_RECIPES_URL;
-    }
-
-    protected Client getClient() {
-        return new OkClient(new OkHttpClient());
     }
 
     protected Converter getConverter() {
@@ -47,7 +49,7 @@ public class GodtCloudImpl implements GodtCloud {
         if(recipesService == null) {
             final RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(getEndpoint())
-                    .setClient(getClient())
+                    .setClient(client)
                     .setConverter(getConverter())
                     .build();
 

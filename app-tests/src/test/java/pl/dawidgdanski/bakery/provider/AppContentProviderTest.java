@@ -11,11 +11,10 @@ import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RuntimeEnvironment;
 
 import pl.dawidgdanski.bakery.AppRobolectricTestRunner;
+import pl.dawidgdanski.bakery.TestApp;
 import pl.dawidgdanski.bakery.database.ContentMapper;
-import pl.dawidgdanski.bakery.database.DatabaseHelper;
 import pl.dawidgdanski.bakery.database.contract.ElementContract;
 import pl.dawidgdanski.bakery.database.contract.IngredientContract;
 import pl.dawidgdanski.bakery.database.contract.RecipeContract;
@@ -31,15 +30,13 @@ public class AppContentProviderTest {
 
     private final ContentResolver contentResolver;
 
-
     public AppContentProviderTest() {
-        this.contentResolver = RuntimeEnvironment.application.getContentResolver();
+        this.contentResolver = TestApp.get().getContentResolver();
     }
 
     @Before
     public void setUp() {
-        DatabaseHelper.release();
-        DatabaseHelper.initialize(RuntimeEnvironment.application);
+
     }
 
     @Test

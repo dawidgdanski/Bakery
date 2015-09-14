@@ -14,11 +14,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 import pl.dawidgdanski.bakery.library.TestDataProvider;
 import pl.dawidgdanski.bakery.library.model.Recipe;
+import retrofit.client.OkClient;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP, manifest = Config.NONE)
@@ -51,7 +51,7 @@ public class GodtCloudTest {
     @Ignore
     @Test
     public void productionGodtCloudTest() {
-        GodtCloud cloud = new GodtCloudImpl();
+        GodtCloud cloud = new GodtCloudImpl(new OkClient());
 
         List<Recipe> recipeList = cloud.getRecipesPage(0, 10);
 

@@ -3,12 +3,12 @@ package pl.dawidgdanski.bakery.controller;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-final class Preferences {
+public final class Preferences {
 
     private final SharedPreferences sharedPreferences;
 
-    public Preferences(final String preferenceTarget, final Context applicationContext) {
-        sharedPreferences = applicationContext.getSharedPreferences(preferenceTarget, Context.MODE_PRIVATE);
+    public Preferences(final String preferenceName, final Context applicationContext) {
+        sharedPreferences = applicationContext.getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
     }
 
     public void remove(final String key) {

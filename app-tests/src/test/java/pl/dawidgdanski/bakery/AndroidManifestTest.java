@@ -17,8 +17,6 @@ public class AndroidManifestTest {
         final Application application = RuntimeEnvironment.application;
 
         Assertions.assertThat(application).isInstanceOf(TestApp.class);
-
-        Assertions.assertThat(DatabaseHelper.isInitialized()).isTrue();
     }
 
 }

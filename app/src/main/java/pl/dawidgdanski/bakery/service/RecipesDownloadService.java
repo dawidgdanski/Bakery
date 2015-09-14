@@ -2,26 +2,35 @@ package pl.dawidgdanski.bakery.service;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+
+import com.squareup.otto.Bus;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import pl.dawidgdanski.bakery.controller.AppController;
-import pl.dawidgdanski.bakery.controller.BusProvider;
-import pl.dawidgdanski.bakery.controller.GodtCloudProvider;
 import pl.dawidgdanski.bakery.controller.PersistenceManager;
 import pl.dawidgdanski.bakery.event.RecipesLoadedEvent;
+import pl.dawidgdanski.bakery.inject.DependencyInjector;
+import pl.dawidgdanski.bakery.library.cloud.GodtCloud;
 import pl.dawidgdanski.bakery.library.model.Recipe;
 
 public class RecipesDownloadService extends IntentService {
 
     private static final String TAG = RecipesDownloadService.class.getSimpleName();
 
-    private PersistenceManager persistenceManager;
+    @Inject
+    PersistenceManager persistenceManager;
 
-    private MainThreadHandler mainThreadHandler;
+    @Inject
+    GodtCloud godtCloud;
+
+    @Inject
+    AppController appController;
+
+    @Inject
+    Bus bus;
 
     public RecipesDownloadService() {
         super(TAG);
@@ -30,18 +39,16 @@ public class RecipesDownloadService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        persistenceManager = new PersistenceManager(this);
-        mainThreadHandler = new MainThreadHandler();
+        DependencyInjector.getGraph().inject(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        AppController appController = AppController.getInstance();
 
         final int loadedRecipes = appController.getLoadedRecipesCount();
         final int offset = AppController.RECIPES_OFFSET;
 
-        List<Recipe> recipeList = GodtCloudProvider.getInstance().getRecipesPage(loadedRecipes, offset);
+        List<Recipe> recipeList = godtCloud.getRecipesPage(loadedRecipes, offset);
 
         try {
             persistenceManager.persistRecipes(recipeList);
@@ -49,19 +56,7 @@ public class RecipesDownloadService extends IntentService {
         } catch (Exception ignored) {
         }
 
-        mainThreadHandler.sendEmptyMessage(0);
-    }
-
-    private static class MainThreadHandler extends Handler {
-
-        public MainThreadHandler() {
-            super(Looper.getMainLooper());
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            BusProvider.getInstance().post(new RecipesLoadedEvent());
-        }
+        bus.post(new RecipesLoadedEvent());
     }
 
 }
